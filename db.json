@@ -2,17 +2,7 @@
   "todos": [
     {
       "title": "Todo 1",
-      "isCompleted": true,
-      "id": 1
-    },
-    {
-      "title": "Todo 2",
-      "isCompleted": true,
-      "id": 2
-    },
-    {
-      "title": "Todo 3",
-      "isCompleted": true,
+      "isCompleted": false,
       "id": 3
     },
     {
@@ -22,8 +12,13 @@
     },
     {
       "title": "Add Task Editibility",
-      "isCompleted": false,
+      "isCompleted": true,
       "id": 5
+    },
+    {
+      "title": "Push To Repo",
+      "isCompleted": false,
+      "id": 6
     }
   ]
 }

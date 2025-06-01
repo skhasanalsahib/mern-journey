@@ -4,11 +4,14 @@ const todoList = document.getElementById("todo-list");
 const todoFrom = document.getElementById("todo-form");
 const todoInput = document.getElementById("todo-input");
 
+const submitBtn = document.getElementById("submit-btn");
 const filterAllBtn = document.getElementById("filter-all");
 const filterActiveBtn = document.getElementById("filter-active");
 const filterCompletedBtn = document.getElementById("filter-completed");
 
 let currentFilter = "all"; //all | active | completed
+
+let editingTodoId = null;
 
 //Load todos with fetch api with filtering
 
@@ -64,17 +67,28 @@ function renderTodos(todos) {
     lfetDiv.appendChild(checkbox);
     lfetDiv.appendChild(title);
 
+    // Edit Button
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.className =
+      "bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600";
+
+    editBtn.addEventListener("click", () => {
+      editTodo(todo.id, todo.title);
+    });
+
     // Delete button
     const delBtn = document.createElement("button");
     delBtn.textContent = "Delete Todo";
     delBtn.className =
-      "bg-red-500 text-white px-3 py-1 rounded hover:big-red-600";
+      "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600";
 
     delBtn.addEventListener("click", () => {
       deleteTodo(todo.id);
     });
 
     li.appendChild(lfetDiv);
+    li.append(editBtn);
     li.appendChild(delBtn);
 
     todoList.append(li);
@@ -93,6 +107,14 @@ async function toggleIsCompleted(todoId, isCompleted) {
   await loadTodos();
 }
 
+// Edit TODO FUNC use param isediting to change the behavior of the add todo btn
+async function editTodo(todoId, title) {
+  todoInput.value = title;
+  editingTodoId = todoId;
+
+  submitBtn.textContent = "Save";
+}
+
 async function deleteTodo(todoId) {
   await fetch(`${API}/${todoId}`, {
     method: "DELETE",
@@ -101,28 +123,52 @@ async function deleteTodo(todoId) {
   await loadTodos();
 }
 
-todoFrom.addEventListener("submit", async (e) => {
+todoFrom.addEventListener("submit", (e) => {
   e.preventDefault();
+  addTodo(editingTodoId);
+});
 
-  const title = todoInput.value.trim();
+// Add TODO FUNC
+async function addTodo(isEditing = false) {
+  if (!isEditing) {
+    const title = todoInput.value.trim();
 
-  if (!title) return;
+    if (!title) return;
 
-  await fetch(API, {
-    method: "POST",
-    body: JSON.stringify({
-      title,
-      isCompleted: false,
-    }),
-    headers: {
-      "Content-type": "application/json",
-    },
-  });
+    await fetch(API, {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        isCompleted: false,
+      }),
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+  } else {
+    await saveEditTodo();
+    submitBtn.textContent = "Add Todo";
+  }
 
   await loadTodos();
 
   todoInput.value = "";
-});
+}
+
+async function saveEditTodo() {
+  const newTitle = todoInput.value;
+
+  await fetch(`${API}/${editingTodoId}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      title: newTitle,
+    }),
+    headers: { "Content-type": "application/json" },
+  });
+
+  await loadTodos();
+  editingTodoId = null;
+}
 
 filterAllBtn.addEventListener("click", async () => {
   currentFilter = "all";
