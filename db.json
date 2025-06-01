@@ -1,0 +1,29 @@
+{
+  "todos": [
+    {
+      "title": "Todo 1",
+      "isCompleted": true,
+      "id": 1
+    },
+    {
+      "title": "Todo 2",
+      "isCompleted": true,
+      "id": 2
+    },
+    {
+      "title": "Todo 3",
+      "isCompleted": true,
+      "id": 3
+    },
+    {
+      "title": "Practice JSON server and make todo app",
+      "isCompleted": true,
+      "id": 4
+    },
+    {
+      "title": "Add Task Editibility",
+      "isCompleted": false,
+      "id": 5
+    }
+  ]
+}
