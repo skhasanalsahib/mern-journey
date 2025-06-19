@@ -14,6 +14,7 @@ export default function AddTodo({ onAddTodo }) {
       <button
         onClick={() => {
           onAddTodo(title);
+          setTitle("");
         }}
       >
         Add
