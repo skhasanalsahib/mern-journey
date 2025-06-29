@@ -1,42 +1,9 @@
-import { useState } from "react";
+import { useContext } from "react";
+import TodoContent from "./TodoContent";
+import TodosContext from "../contexts/TodosContext";
 
-export default function Todo({ todo, onChangeTodo, onDeleteTodo }) {
-  const [isEditing, setIsEditing] = useState(false);
-
-  const todoContent = isEditing ? (
-    <>
-      <input
-        type="text"
-        value={todo.title}
-        onChange={(e) => {
-          onChangeTodo({
-            id: todo.id,
-            title: e.target.value,
-            done: todo.done,
-          });
-        }}
-      />
-      <button
-        onClick={() => {
-          setIsEditing(false);
-        }}
-      >
-        Save
-      </button>
-    </>
-  ) : (
-    <>
-      {todo.title}
-      <button
-        onClick={() => {
-          setIsEditing(true);
-        }}
-      >
-        Edit
-      </button>
-    </>
-  );
-
+export default function Todo({ todo }) {
+  const { onChangeTodo, onDeleteTodo } = useContext(TodosContext);
   return (
     <>
       <input
@@ -51,7 +18,7 @@ export default function Todo({ todo, onChangeTodo, onDeleteTodo }) {
         }}
       />{" "}
       {/*COntroled Component */}
-      {todoContent}
+      <TodoContent todo={todo} />
       <button
         onClick={() => {
           onDeleteTodo(todo.id);

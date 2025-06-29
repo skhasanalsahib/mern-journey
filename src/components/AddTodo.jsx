@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import TodosContext, { useTodo } from "../contexts/TodosContext";
 
-export default function AddTodo({ onAddTodo }) {
+export default function AddTodo() {
   const [title, setTitle] = useState("");
+  const { onAddTodo } = useTodo();
 
   return (
     <>
